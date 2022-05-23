@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="tab">
+    <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'London')">Food Places</button>
+    <button class="tablinks" onclick="openCity(event, 'Paris')">User Reviews</button>
+</div>
+
+{% if queryset and queryset2 %}
+<div class="tabcontent" id="London">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for foodplace in queryset %}
+        <div class="col">
+            <div class="card" style="">
+                <img alt="..." class="card-img-top" src="{{ foodplace.thumbnail.url }}"
+                     style="width:100%; height: 300px;">
+                <div class="card-body">
+                    <h5 class="card-title text-success">{{ foodplace.name }} by {{ foodplace.owner_name }}</h5>
+                    <p class="card-text">{{ foodplace.location }}</p>
+                    <p class="card-text">{{ foodplace.description }}</p>
+                    <b>Rated : {{ foodplace.rating }} <span class="fa fa-star checked"></span></b>
+                </div>
+                <a class="btn btn-success btn-sm" href="{% url 'details-foodplace' foodplace.foodplace_uuid %}"
+                   style="width: 30%;margin: 18px;">Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="tabcontent" id="Paris">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for user_review in queryset2 %}
+        <div class="card m-2">
+            <div class="card-body">
+                <h5 class="card-title text-success">{{ user_review.food_place_name }}</h5>
+                <p class="card-text">{{ user_review.location }}</p>
+                <hr/>
+                <b>{{ user_review.subject }}</b>
+                <p class="card-text">{{ user_review.review}}</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Last updated {{ user_review.updated_at }} by </small> <b>@{{ user_review.user }}</b>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% elif queryset %}
+<div class="tabcontent" id="London">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for foodplace in queryset %}
+        <div class="col">
+            <div class="card" style="">
+                <img alt="..." class="card-img-top" src="{{ foodplace.thumbnail.url }}"
+                     style="width:100%; height: 300px;">
+                <div class="card-body">
+                    <h5 class="card-title text-success">{{ foodplace.name }} by {{ foodplace.owner_name }}</h5>
+                    <p class="card-text">{{ foodplace.location }}</p>
+                    <p class="card-text">{{ foodplace.description }}</p>
+                    <b>Rated : {{ foodplace.rating }} <span class="fa fa-star checked"></span></b>
+                </div>
+                <a class="btn btn-success btn-sm" href="{% url 'details-foodplace' foodplace.foodplace_uuid %}"
+                   style="width: 30%;margin: 18px;">Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% elif queryset2 %}
+<div class="tabcontent" id="Paris">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for user_review in queryset2 %}
+        <div class="card m-2">
+            <div class="card-body">
+                <h5 class="card-title text-success">{{ user_review.food_place_name }}</h5>
+                <p class="card-text">{{ user_review.location }}</p>
+                <hr/>
+                <b>{{ user_review.subject }}</b>
+                <p class="card-text">{{ user_review.review}}</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Last updated {{ user_review.updated_at }}</small><b>@{{ user_review.user }}</b>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<script>
+document.getElementById("defaultOpen").click();
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+
+
+
+</script>
+
+{% endblock %}

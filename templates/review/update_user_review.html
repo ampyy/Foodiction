@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+{% if user.username ==  userreview.user %}
+
+<div class="container">
+    <div class=" text-center mt-3 ">
+        <h1>Update your Review</h1>
+    </div>
+    <div class="row ">
+        <div class="col-lg-7 mx-auto">
+            <div class="card mt-2 mx-auto p-4 bg-light">
+                <div class="card-body bg-light">
+
+                    <div class="container">
+                        <div class="controls">
+                            <form enctype="multipart/form-data" method="post" novalidate>
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <br>
+                                <input class="btn btn-success pt-2" type="submit" value="Upload">
+                            </form>
+                            <div class="col-md-12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.8 -->
+    </div>
+    <!-- /.row-->
+</div>
+{% else %}
+<div class="container mt-3 text-center">
+    <p class=""><span class="text-danger">Opps!</span> Unauthorized Access.</p>
+    <p class="lead">
+        Try to Login and Reach the page?
+    </p>
+    <a class="btn btn-success" href="{% url 'login' %}">Back to safe place</a>
+</div>
+{% endif %}
+{% endblock %}

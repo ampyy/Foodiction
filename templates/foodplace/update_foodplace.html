@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+{% if user.username ==  foodplace_user %}
+
+<section class="h-100">
+    <div class="container py-5 h-75">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card card-registration my-4">
+                    <div class="row g-0">
+                        <div class="col-xl-6 d-none d-xl-block">
+                            <img alt="Sample photo"
+                                 class="img-fluid"
+                                 src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                                 style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;"/>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="card-body p-md-5 text-black">
+                                <h3 class="mb-5 text-uppercase">Update Your FoodPlace</h3>
+                                <form enctype="multipart/form-data" method="post">
+                                    {% csrf_token %}
+                                    {{ form|crispy }}
+                                    <input class="btn btn-success mt-4" type="submit" value="Add">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<div class="container mt-3 text-center">
+            <p class=""><span class="text-danger">Opps!</span> Unauthorized Access.</p>
+            <p class="lead">
+                Try to Login and Reach the page?
+            </p>
+            <a class="btn btn-success" href="{% url 'login' %}">Back to safe place</a>
+        </div>
+{% endif %}
+{% endblock %}

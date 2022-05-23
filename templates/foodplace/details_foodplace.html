@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" xmlns="http://www.w3.org/1999/html">
+    <div class="ncard">
+        <div class="container-fliud">
+            <div class="wrapper row">
+                <div class="preview col-md-6">
+
+                    <div class="preview-pic tab-content">
+                        <div class="tab-pane active" id="pic-1"><img src="{{ foodplace.thumbnail.url }}"
+                                                                     style="max-height: 400px;"/></div>
+                        {% if user.username == foodplace.user %}
+                        <a class="btn btn-success mt-3"
+                           href="{% url 'update-foodplace' foodplace.foodplace_uuid %}">Update</a>
+                        {% endif %}
+                        <a href="{{ foodplace.maps_location_link }}" class="btn btn-warning mt-3" target="_blank">Find on maps</a>
+                    </div>
+                </div>
+                <div class="details col-md-6">
+                    <h3 class="product-title">{{ foodplace.name }}</h3>
+                    <p><b>Owner : </b>{{ foodplace.owner_name }}</p>
+                    <div class="rating">
+                        <div class="stars">
+                            {{ ans }} <span class="fa fa-star checked"></span>
+                        </div>
+                        <hr>
+                        <span class="review-no">{{ ratings.count }} reviews </span>
+
+                    </div>
+                    <p class="product-description">{{ foodplace.description }}</p>
+                    <p class="vote"><strong>Location</strong> : {{ foodplace.location }}<strong></strong></p>
+                    <h5 class="colors">
+                        <span class="color text-center" data-toggle="tooltip" style="background:red;"><i
+                                class="fas fa-utensil-spoon mt-2"></i> </span>
+                        <a class="add-to-cart btn btn-default" href="{{ foodplace.zomato_link }}" target="_blank">View
+                            on Zomato</a>
+                        <br>
+
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if review %}
+<div class="conatiner text-center m-3">
+    <b>Already reviewed!</b>
+    <a class="btn btn-success" href="{% url 'update-review' foodplace.foodplace_uuid %}">Update Review</a>
+</div>
+{% else %}
+{% if user.is_authenticated %}
+{{ error }}
+<div class="container">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label" for="exampleFormControlInput1">Rating</label>
+            <input class="form-control" id="exampleFormControlInput1" name="rating" placeholder="Rate Product"
+                   type="number">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="exampleFormControlTextarea1">Review</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="review" rows="3"></textarea>
+        </div>
+        <input class="btn btn-success mb-3" type="submit" value="Upload">
+    </form>
+</div>
+{% else %}
+<div class="container text-center mb-5">
+    <h4 class="text-success">Login to Review <a href="{% url 'login' %}">login</a></h4>
+</div>
+{% endif %}
+{% endif %}
+
+
+<div class="container">
+    <hr>
+    {% for r in ratings %}
+    <div class="alert alert-light" role="alert">
+        <p>{{ r.review }}</p> <b>{{ r.rating }} <span class="fa fa-star checked"></span> </b>
+        <p style="float:right">{{ r.updated_at }}</p>
+        <b>by @{{ r.user }}</b>
+    </div>
+
+    {% endfor %}
+</div>
+
+
+{% endblock %}
